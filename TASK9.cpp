@@ -1,5 +1,5 @@
-﻿#include <iostream>
-#include <cstdlib>  // Для использования abs()
+#include <iostream>
+#include <cstdlib> // Для использования abs()
 
 using namespace std;
 
@@ -9,43 +9,26 @@ struct Fraction {
     int denominator; // Знаменатель
 };
 
-// Функция для вычисления НОД (наибольший общий делитель)
-int gcd(int a, int b) {
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
-
-// Функция для упрощения дроби
-void simplify(Fraction& frac) {
-    int commonDivisor = gcd(abs(frac.numerator), abs(frac.denominator));
-    frac.numerator /= commonDivisor;
-    frac.denominator /= commonDivisor;
-}
-
 int main() {
     Fraction frac1, frac2, result;
-    char operation;
-    char continueCalculation;
+    char operation;            // Операция (+, -, *, /)
+    char continueCalculation;  // Переменная для продолжения или завершения цикла
 
     do {
-        // Ввод первой дроби
+        // Этап 1: Ввод первой дроби
         cout << "Enter first fraction (numerator/denominator): ";
-        char slash;
+        char slash; // Переменная для считывания символа '/'
         cin >> frac1.numerator >> slash >> frac1.denominator;
 
-        // Ввод операции
+        // Этап 2: Ввод операции
         cout << "Enter operation (+, -, *, /): ";
         cin >> operation;
 
-        // Ввод второй дроби
+        // Этап 3: Ввод второй дроби
         cout << "Enter second fraction (numerator/denominator): ";
         cin >> frac2.numerator >> slash >> frac2.denominator;
 
-        // Выполнение операции в зависимости от введенного знака
+        // Этап 4: Выполнение операции
         switch (operation) {
         case '+':
             // Сложение: (a/b) + (c/d) = (a * d + b * c) / (b * d)
@@ -68,17 +51,30 @@ int main() {
             result.denominator = frac1.denominator * frac2.numerator;
             break;
         default:
+            // Сообщение об ошибке, если введен некорректный оператор
             cout << "Invalid operation!" << endl;
             continue;
         }
 
-        // Упрощение результата
-        simplify(result);
+        // Этап 5: Упрощение дроби
+        // НОД для упрощения дроби
+        int a = abs(result.numerator);
+        int b = abs(result.denominator);
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        int gcd = a; // НОД числителя и знаменателя
 
-        // Вывод результата
+        // Упрощение
+        result.numerator /= gcd;
+        result.denominator /= gcd;
+
+        // Этап 6: Вывод результата
         cout << "Result: " << result.numerator << "/" << result.denominator << endl;
 
-        // Запрос на продолжение вычислений
+        // Этап 7: Запрос на продолжение вычислений
         cout << "Do you want to perform another calculation? (y/n): ";
         cin >> continueCalculation;
 
