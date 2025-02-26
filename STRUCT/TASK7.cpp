@@ -1,44 +1,40 @@
-﻿#include <iostream>
+#include <iostream>
 
 using namespace std;
 
-int main()
-{
+// Структура для хранения суммы в старой английской системе
+struct Sterling {
+    int pounds;   // Фунты
+    int shillings; // Шиллинги
+    int pence;    // Пенсы
+};
+
+int main() {
     char continueCalc; // Переменная для проверки, хочет ли пользователь продолжить
 
-    do
-    {
-        // Вводим первую сумму
-        int pounds1, shillings1, pence1;
-        cout << "Enter the first amount (pounds shillings pence): ";
-        cin >> pounds1 >> shillings1 >> pence1;
+    do {
+        double decimalPounds; // Переменная для хранения суммы в десятичных фунтах
 
-        // Вводим вторую сумму
-        int pounds2, shillings2, pence2;
-        cout << "Enter the second amount (pounds shillings pence): ";
-        cin >> pounds2 >> shillings2 >> pence2;
+        // Ввод суммы в десятичных фунтах
+        cout << "Enter the amount in decimal pounds: ";
+        cin >> decimalPounds;
 
-        // Складываем суммы
-        int totalPounds = pounds1 + pounds2;
-        int totalShillings = shillings1 + shillings2;
-        int totalPence = pence1 + pence2;
+        // Перевод суммы из десятичных фунтов в старую систему
+        int totalPence = static_cast<int>(decimalPounds * 240);  // 1 фунт = 240 пенсов
 
-        // Нормализуем, если пенсов больше 11
-        if (totalPence >= 12)
-        {
-            totalShillings += totalPence / 12;
-            totalPence = totalPence % 12;
-        }
+        // Создаем объект структуры Sterling для хранения переведенной суммы
+        Sterling sterling;
 
-        // Нормализуем, если шиллингов больше 19
-        if (totalShillings >= 20)
-        {
-            totalPounds += totalShillings / 20;
-            totalShillings = totalShillings % 20;
-        }
+        sterling.pounds = totalPence / 240;        // Получаем количество фунтов
+        totalPence %= 240;                         // Оставшиеся пенсы после перевода в фунты
 
-        // Выводим результат
-        cout << "Total sum: " << totalPounds << " " << totalShillings << " " << totalPence << endl;
+        sterling.shillings = totalPence / 12;      // Получаем количество шиллингов
+        sterling.pence = totalPence % 12;          // Оставшиеся пенсы после перевода в шиллинги
+
+        // Вывод результата
+        cout << "Converted amount: " << sterling.pounds << " pounds, "
+             << sterling.shillings << " shillings, "
+             << sterling.pence << " pence." << endl;
 
         // Запрашиваем, хочет ли пользователь продолжить
         cout << "Would you like to continue (y/n)? ";
